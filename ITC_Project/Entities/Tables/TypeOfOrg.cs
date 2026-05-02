@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Entities
 {
-    public class Category
+    public class TypeOfOrg
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string? PhotoURL { get; set; }
-        public string? ImagePublicId { get; set; }
-        public DateTime CreatedAt { get; set; }
+
+        // Navigation properties
+        public ICollection<TeachingOrganization> TeachingOrganizations { get; set; } = new List<TeachingOrganization>();
     }
 }

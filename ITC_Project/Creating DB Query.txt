@@ -1,0 +1,176 @@
+
+Create Table Countries
+(
+ID int Identity(1,1) not null,
+Name nvarchar(50) not null,
+primary key(ID)
+);
+
+Create Table TypeOfOrg
+(
+ID int Identity(1,1) not null,
+Name nvarchar(50) not null,
+primary key(ID)
+);
+
+Create Table TeachingOrganizations
+(
+ID int Identity(1,1) not null,
+Name nvarchar(50) not null,
+CountryID int not null references Countries(ID),
+SubscriptionType int not null references TypeOfOrg(ID),
+IsActive bit not null,
+Email nvarchar(50) not null,
+LogoPath nvarchar(100) not null,
+primary key(ID)
+);
+
+Create Table People
+(
+ID int Identity(1,1) not null,
+Email nvarchar(50) not null,
+FullName nvarchar(50) not null,
+Phone nvarchar(50) not null,
+CountryID int not null references Countries(ID),
+Password nvarchar(100) not null, -- Hash
+Gender bit not null,
+DateOfBirth DateTime not null,
+NationalID nvarchar(100) not null,
+primary key(ID)
+);
+
+Create Table Admins
+(
+ID int Identity(1,1) not null,
+OrganizationID int not null references TeachingOrganizations(ID),
+PersonID int not null references People(ID),
+IsActive bit not null,
+UserName nvarchar(50) not null,
+primary key(ID)
+);
+
+Create Table SubscriptionTypes
+(
+ID int Identity(1,1) not null,
+Name nvarchar(50) not null,
+Description nvarchar(500) not null,
+primary key(ID)
+);
+
+Create Table Subscriptions
+(
+ID int Identity(1,1) not null,
+OrganizationID int not null references SubscriptionTypes(ID),
+SubscribedByAdminID int not null references Admins(ID),
+CreatedDate DateTime not null,
+primary key(ID)
+);
+
+Create Table Instructors
+(
+ID int Identity(1,1) not null,
+primary key(ID),
+PersonID int not null references People(ID),
+OrganizationID int not null references TeachingOrganizations(ID),
+ApprovedByAdminID int not null references Admins(ID),
+UserName nvarchar(50) not null,
+IsActive bit not null
+);
+
+Create Table Courses
+(
+ID int Identity(1,1) not null,
+InstructorID int not null references Instructors(ID),
+Name nvarchar(50) not null,
+primary key(ID)
+);
+
+Create Table Students
+(
+ID int Identity(1,1) not null,
+PersonID int not null references People(ID),
+TeachingOrganizationID int not null references TeachingOrganizations(ID),
+primary key(ID)
+);
+
+Create Table Enrollments
+(
+ID int Identity(1,1) not null,
+StudentID int not null references Students(ID),
+CourseID int not null references Courses(ID),
+DateOfEnrollment DateTime not null,
+primary key(ID)
+);
+
+Create Table Sessions
+(
+ID int Identity(1,1) not null,
+CourseID int not null references Courses(ID),
+IsEnd bit not null,
+IsCameraRequired bit not null,
+StartTime DateTime not null,
+EndTime DateTime not null,
+primary key(ID)
+);
+
+Create Table SessionParticipants
+(
+ID int Identity(1,1) not null,
+SessionID int not null references Sessions(ID),
+StudentID int not null references Students(ID),
+EnterTime DateTime not null,
+LeaveTime DateTime not null,
+primary key(ID)
+);
+
+Create Table SessionReports
+(
+ID int Identity(1,1) not null,
+SessionParticipantID int not null references SessionParticipants(ID),
+EyeFocusScore float not null default 100,
+InteractionScore float not null default 100,
+primary key(ID)
+);
+
+Create Table AIRecommendationsForStudents
+(
+ID int Identity(1,1) not null,
+SessionReportID int not null references SessionReports(ID),
+Message nvarchar(1000) not null,
+primary key(ID)
+);
+
+Create Table AIRecommendationsForInstructors
+(
+ID int Identity(1,1) not null,
+SessionID int not null references Sessions(ID),
+Message nvarchar(1000) not null,
+primary key(ID)
+);
+
+Create Table Quizzes
+(
+ID int Identity(1,1) not null,
+CourseID int not null references Courses(ID),
+Title nvarchar(100) not null,
+primary key(ID)
+);
+
+Create Table Questions
+(
+ID int Identity(1,1) not null,
+QuizID int not null references Quizzes(ID),
+QuestionText nvarchar(1000) not null,
+QuestionAnswer nvarchar(1000) not null,
+primary key(ID)
+);
+
+Create Table StudentAnswers
+(
+ID int Identity(1,1) not null,
+StudentID int not null references Students(ID),
+QuestionID int not null references Questions(ID),
+StudentAnswer nvarchar(1000) not null,
+SubmitDate DateTime not null,
+primary key(ID)
+);
