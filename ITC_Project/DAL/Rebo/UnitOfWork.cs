@@ -1,8 +1,7 @@
-﻿using DAL.Data;
+using DAL.Data;
 using Entities;
 using Interfaces;
 using Microsoft.EntityFrameworkCore.Storage;
-using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,75 +12,86 @@ namespace DAL
 {
     public class UnitOfWork : IUnitOfWork
     {
-        protected AppDBContext _context;
+        protected AppDbContext _context;
         private IDbContextTransaction _currentTransaction;
-        public UnitOfWork(AppDBContext context)
+
+        public UnitOfWork(AppDbContext context)
         {
             _context = context;
-            Users = new Repository<User>(_context);
-            Suppliers = new Repository<Supplier>(_context);
-            Categories = new Repository<Category>(_context);
-            Roles = new Repository<Role>(_context);
-            JopSeekers = new Repository<JopSeeker>(_context);
-            JopSeekerCategoryApplies = new Repository<JopSeekerCategoryApply>(_context);
-            SupplierSubscriptionPlans = new Repository<SupplierSubscriptionPlan>(_context);
-            JobPosts = new Repository<JobPost>(_context);
-            Orders = new Repository<Order>(_context);
-            SubscriptionPlans = new Repository<SubscriptionPlan>(_context);
-            UserRoles = new Repository<UserRole>(_context);
-            UserTokens = new Repository<UserToken>(_context);
-            SupplierCategories = new Repository<SupplierCategory>(_context);
-            Products = new Repository<Product>(_context);
-            SpecialProducts = new Repository<SpecialProduct>(_context);
-            //PasswordResetTokens = new Repository<PasswordResetToken>(_context);
-            Reviews = new Repository<Review>(_context);
-            Deals = new Repository<Deal>(_context);
-            DealDetailsVerifications = new Repository<DealDetailsVerification>(_context);
-            SupplierAdvertisements = new Repository<SupplierAdvertisement>(_context);
-            SupplierSubscriptionPlanArchives = new Repository<SupplierSubscriptionPlanArchive>(_context);
-            UnconfirmedSupplierSubscriptionPlans = new Repository<UnconfirmedSupplierSubscriptionPlan>(_context);
-            SupplierProductRequests = new Repository<SupplierProductRequest>(_context);
-            SupplierAdvertisementRequests = new Repository<SupplierAdvertisementRequest>(_context);
-            SupplierAcceptOrderRequests = new Repository<SupplierAcceptOrderRequest>(_context);
-            UserRequestCategories = new Repository<UserRequestCategory>(_context);
-            OrderItems = new Repository<OrderItem>(_context);
-            DealItems = new Repository<DealItem>(_context);
-            Blogs = new Repository<Blog>(_context);
+
+            // Lookup tables
+            Countries = new Repository<Country>(_context);
+            TypeOfOrgs = new Repository<TypeOfOrg>(_context);
+            SubscriptionTypes = new Repository<SubscriptionType>(_context);
+
+            // Organization & People
+            TeachingOrganizations = new Repository<TeachingOrganization>(_context);
+            People = new Repository<Person>(_context);
+            Admins = new Repository<Admin>(_context);
+            Subscriptions = new Repository<Subscription>(_context);
+
+            // Instructors & Courses
+            Instructors = new Repository<Instructor>(_context);
+            Courses = new Repository<Course>(_context);
+
+            // Students & Enrollments
+            Students = new Repository<Student>(_context);
+            Enrollments = new Repository<Enrollment>(_context);
+
+            // Sessions & Reports
+            Sessions = new Repository<Session>(_context);
+            SessionParticipants = new Repository<SessionParticipant>(_context);
+            SessionReports = new Repository<SessionReport>(_context);
+
+            // AI Recommendations
+            AIRecommendationsForStudents = new Repository<AIRecommendationForStudent>(_context);
+            AIRecommendationsForInstructors = new Repository<AIRecommendationForInstructor>(_context);
+
+            // Quizzes & Answers
+            Quizzes = new Repository<Quiz>(_context);
+            Questions = new Repository<Question>(_context);
+            StudentAnswers = new Repository<StudentAnswer>(_context);
         }
-        public IRepository<SpecialProduct> SpecialProducts { get; }
-        public IRepository<SupplierProductRequest> SupplierProductRequests { get; }
-        public IRepository<SupplierAdvertisementRequest> SupplierAdvertisementRequests { get; }
-        public IRepository<SupplierAcceptOrderRequest> SupplierAcceptOrderRequests { get; }
-        public IRepository<SupplierSubscriptionPlanArchive> SupplierSubscriptionPlanArchives { get; }
-        //public IRepository<PasswordResetToken> PasswordResetTokens { get; }
-        public IRepository<Review> Reviews { get; }
-        public IRepository<Deal> Deals { get; }
-        public IRepository<DealDetailsVerification> DealDetailsVerifications { get; }
-        public IRepository<User> Users { get; }
-        public IRepository<Product> Products { get; }
-        public IRepository<Supplier> Suppliers { get; }
-        public IRepository<Category> Categories { get; }
-        public IRepository<Role> Roles { get; }
-        public IRepository<JopSeeker> JopSeekers { get; }
-        public IRepository<JopSeekerCategoryApply> JopSeekerCategoryApplies { get; }
-        public IRepository<SupplierSubscriptionPlan> SupplierSubscriptionPlans { get; }
-        public IRepository<JobPost> JobPosts { get; }
-        public IRepository<Order> Orders { get; }
-        public IRepository<SubscriptionPlan> SubscriptionPlans { get; }
-        public IRepository<UserRole> UserRoles { get; }
-        public IRepository<UserToken> UserTokens { get; }
-        public IRepository<SupplierCategory> SupplierCategories { get; }
-        public IRepository<SupplierAdvertisement> SupplierAdvertisements { get; }
-        public IRepository<UnconfirmedSupplierSubscriptionPlan> UnconfirmedSupplierSubscriptionPlans { get; }
-        public IRepository<UserRequestCategory> UserRequestCategories { get; }
-        public IRepository<OrderItem> OrderItems { get; }
-        public IRepository<DealItem> DealItems { get; }
-        public IRepository<Blog> Blogs { get; }
+
+        // Lookup tables
+        public IRepository<Country> Countries { get; }
+        public IRepository<TypeOfOrg> TypeOfOrgs { get; }
+        public IRepository<SubscriptionType> SubscriptionTypes { get; }
+
+        // Organization & People
+        public IRepository<TeachingOrganization> TeachingOrganizations { get; }
+        public IRepository<Person> People { get; }
+        public IRepository<Admin> Admins { get; }
+        public IRepository<Subscription> Subscriptions { get; }
+
+        // Instructors & Courses
+        public IRepository<Instructor> Instructors { get; }
+        public IRepository<Course> Courses { get; }
+
+        // Students & Enrollments
+        public IRepository<Student> Students { get; }
+        public IRepository<Enrollment> Enrollments { get; }
+
+        // Sessions & Reports
+        public IRepository<Session> Sessions { get; }
+        public IRepository<SessionParticipant> SessionParticipants { get; }
+        public IRepository<SessionReport> SessionReports { get; }
+
+        // AI Recommendations
+        public IRepository<AIRecommendationForStudent> AIRecommendationsForStudents { get; }
+        public IRepository<AIRecommendationForInstructor> AIRecommendationsForInstructors { get; }
+
+        // Quizzes & Answers
+        public IRepository<Quiz> Quizzes { get; }
+        public IRepository<Question> Questions { get; }
+        public IRepository<StudentAnswer> StudentAnswers { get; }
+
         public void Dispose()
         {
             _context.Dispose();
             _currentTransaction?.Dispose();
         }
+
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
             // Check if a transaction is already in progress to avoid nesting issues.
@@ -144,8 +154,6 @@ namespace DAL
             }
         }
 
-
-
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();
@@ -156,5 +164,4 @@ namespace DAL
             return _context.SaveChanges();
         }
     }
-
 }

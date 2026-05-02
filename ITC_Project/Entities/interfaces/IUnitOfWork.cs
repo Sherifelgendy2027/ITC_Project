@@ -1,53 +1,47 @@
-﻿
 using Entities;
 using Interfaces;
 using Microsoft.EntityFrameworkCore.Storage;
-using Models.Entities;
-
-//using Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
-
 
 namespace Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        public IRepository<User> Users { get; }
-        public IRepository<SpecialProduct> SpecialProducts { get; }
-        //public IRepository<PasswordResetToken>  PasswordResetTokens { get; }
-        public IRepository<Review> Reviews { get; }
-        public IRepository<Deal> Deals { get; }
-        public IRepository<DealDetailsVerification> DealDetailsVerifications { get; }
-        public IRepository<Product> Products { get; }
-        public IRepository<Supplier> Suppliers { get; }
-        public IRepository<Category> Categories { get; }
+        // Lookup tables
+        public IRepository<Country> Countries { get; }
+        public IRepository<TypeOfOrg> TypeOfOrgs { get; }
+        public IRepository<SubscriptionType> SubscriptionTypes { get; }
 
-        public IRepository<Role> Roles { get; } 
-        public IRepository<JopSeeker> JopSeekers { get; } 
-        public IRepository<JopSeekerCategoryApply> JopSeekerCategoryApplies { get; } 
-        public IRepository<SupplierSubscriptionPlan> SupplierSubscriptionPlans { get; } 
-        public IRepository<JobPost> JobPosts { get; } 
-        public IRepository<Order> Orders { get; } 
-        public IRepository<SubscriptionPlan> SubscriptionPlans { get; } 
-        public IRepository<UserRole> UserRoles { get; } 
-        public IRepository<UserToken> UserTokens { get; } 
-        public IRepository<SupplierCategory> SupplierCategories { get; }
-        public IRepository<SupplierAdvertisement> SupplierAdvertisements { get; }
-        public IRepository<SupplierSubscriptionPlanArchive> SupplierSubscriptionPlanArchives { get; }
-        public IRepository<UnconfirmedSupplierSubscriptionPlan> UnconfirmedSupplierSubscriptionPlans { get; }
-        public IRepository<SupplierAcceptOrderRequest> SupplierAcceptOrderRequests { get; }
-        public IRepository<SupplierAdvertisementRequest> SupplierAdvertisementRequests { get; }
-        public IRepository<SupplierProductRequest> SupplierProductRequests { get; }
-        public IRepository<UserRequestCategory> UserRequestCategories { get; }
-        public IRepository<DealItem> DealItems { get; }
-        public IRepository<OrderItem> OrderItems { get; }
-        public IRepository<Blog> Blogs { get; }
+        // Organization & People
+        public IRepository<TeachingOrganization> TeachingOrganizations { get; }
+        public IRepository<Person> People { get; }
+        public IRepository<Admin> Admins { get; }
+        public IRepository<Subscription> Subscriptions { get; }
+
+        // Instructors & Courses
+        public IRepository<Instructor> Instructors { get; }
+        public IRepository<Course> Courses { get; }
+
+        // Students & Enrollments
+        public IRepository<Student> Students { get; }
+        public IRepository<Enrollment> Enrollments { get; }
+
+        // Sessions & Reports
+        public IRepository<Session> Sessions { get; }
+        public IRepository<SessionParticipant> SessionParticipants { get; }
+        public IRepository<SessionReport> SessionReports { get; }
+
+        // AI Recommendations
+        public IRepository<AIRecommendationForStudent> AIRecommendationsForStudents { get; }
+        public IRepository<AIRecommendationForInstructor> AIRecommendationsForInstructors { get; }
+
+        // Quizzes & Answers
+        public IRepository<Quiz> Quizzes { get; }
+        public IRepository<Question> Questions { get; }
+        public IRepository<StudentAnswer> StudentAnswers { get; }
+
         int Save();
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitTransactionAsync();
